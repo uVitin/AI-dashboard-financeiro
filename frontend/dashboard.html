@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinanceAI — Dashboard</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="app">
+
+  <!-- ─── Sidebar ─── -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">💰</div>
+      <span class="sidebar-logo-text">FinanceAI</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button class="nav-item active" onclick="setPage('overview')">
+        <span class="nav-icon">📊</span> Visão Geral
+      </button>
+      <button class="nav-item" onclick="setPage('transactions')">
+        <span class="nav-icon">💳</span> Transações
+      </button>
+      <button class="nav-item" onclick="setPage('ai')">
+        <span class="nav-icon">🤖</span> Assistente IA
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-info">
+        <div class="user-avatar" id="user-avatar">?</div>
+        <div>
+          <div class="user-name" id="user-name">Carregando...</div>
+          <div class="user-email" id="user-email"></div>
+        </div>
+      </div>
+      <button class="btn-logout" onclick="logout()">Sair da conta</button>
+    </div>
+  </aside>
+
+  <!-- ─── Main ─── -->
+  <main class="main">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <h1 class="topbar-title" id="page-title">Visão Geral</h1>
+      <div class="topbar-actions">
+        <button class="btn-add" onclick="openModal()">
+          <span>+</span> Nova Transação
+        </button>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <div class="content">
+
+      <!-- ─── Overview Page ─── -->
+      <div id="page-overview" class="page active">
+
+        <div class="tabs">
+          <button class="tab-btn active" onclick="switchTab('month')">Este Mês</button>
+          <button class="tab-btn" onclick="switchTab('year')">Este Ano</button>
+          <button class="tab-btn" onclick="switchTab('all')">Tudo</button>
+        </div>
+
+        <!-- Cards -->
+        <div class="cards-grid">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-label">Saldo Atual</span>
+              <div class="card-icon purple">💰</div>
+            </div>
+            <div class="card-value" id="card-balance">R$ 0,00</div>
+            <div class="card-sub">Receitas - Despesas</div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <span class="card-label">Total Entradas</span>
+              <div class="card-icon green">📈</div>
+            </div>
+            <div class="card-value green" id="card-income">R$ 0,00</div>
+            <div class="card-sub" id="card-income-count">0 transações</div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <span class="card-label">Total Saídas</span>
+              <div class="card-icon red">📉</div>
+            </div>
+            <div class="card-value red" id="card-expense">R$ 0,00</div>
+            <div class="card-sub" id="card-expense-count">0 transações</div>
+          </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="charts-grid">
+          <div class="chart-card">
+            <h3 class="chart-title">Gastos por Categoria</h3>
+            <div class="chart-wrapper">
+              <canvas id="chart-pie"></canvas>
+            </div>
+          </div>
+          <div class="chart-card">
+            <h3 class="chart-title">Evolução Mensal</h3>
+            <div class="chart-wrapper">
+              <canvas id="chart-line"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Transactions -->
+        <div class="section-header">
+          <h2 class="section-title">Transações Recentes</h2>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Descrição</th>
+                <th>Categoria</th>
+                <th>Data</th>
+                <th>Tipo</th>
+                <th>Valor</th>
+              </tr>
+            </thead>
+            <tbody id="recent-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ─── Transactions Page ─── -->
+      <div id="page-transactions" class="page">
+
+        <div class="filters">
+          <select class="filter-select" id="filter-type" onchange="renderTransactions()">
+            <option value="">Todos os tipos</option>
+            <option value="income">Entradas</option>
+            <option value="expense">Saídas</option>
+          </select>
+          <select class="filter-select" id="filter-category" onchange="renderTransactions()">
+            <option value="">Todas as categorias</option>
+          </select>
+          <select class="filter-select" id="filter-month" onchange="renderTransactions()">
+            <option value="">Todos os meses</option>
+            <option value="1">Janeiro</option>
+            <option value="2">Fevereiro</option>
+            <option value="3">Março</option>
+            <option value="4">Abril</option>
+            <option value="5">Maio</option>
+            <option value="6">Junho</option>
+            <option value="7">Julho</option>
+            <option value="8">Agosto</option>
+            <option value="9">Setembro</option>
+            <option value="10">Outubro</option>
+            <option value="11">Novembro</option>
+            <option value="12">Dezembro</option>
+          </select>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Descrição</th>
+                <th>Categoria</th>
+                <th>Data</th>
+                <th>Tipo</th>
+                <th>Valor</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="transactions-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ─── AI Page ─── -->
+      <div id="page-ai" class="page">
+        <div class="ai-panel">
+          <div class="ai-header">
+            <div class="ai-avatar">🤖</div>
+            <div>
+              <div class="ai-name">Assistente FinanceAI</div>
+              <div class="ai-status">● Online</div>
+            </div>
+          </div>
+
+          <div class="ai-messages" id="ai-messages">
+            <div class="message ai">
+              <div class="message-avatar">🤖</div>
+              <div class="message-bubble">
+                Olá! Sou seu assistente financeiro. Posso analisar seus gastos, identificar padrões e te ajudar a economizar. Como posso te ajudar hoje?
+              </div>
+            </div>
+          </div>
+
+          <div class="ai-suggestions">
+            <button class="suggestion-btn" onclick="sendSuggestion(this)">Onde estou gastando mais?</button>
+            <button class="suggestion-btn" onclick="sendSuggestion(this)">Como está meu saldo?</button>
+            <button class="suggestion-btn" onclick="sendSuggestion(this)">Dicas para economizar</button>
+          </div>
+
+          <div class="ai-input-area">
+            <input type="text" class="ai-input" id="ai-input" placeholder="Pergunte algo sobre suas finanças..." onkeydown="if(event.key==='Enter') sendMessage()">
+            <button class="btn-send" onclick="sendMessage()">➤</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- ─── Bottom Nav (Mobile) ─── -->
+<nav class="bottom-nav">
+  <button class="bottom-nav-item active" onclick="setPage('overview')">
+    <span class="nav-icon">📊</span> Início
+  </button>
+  <button class="bottom-nav-item" onclick="setPage('transactions')">
+    <span class="nav-icon">💳</span> Transações
+  </button>
+  <button class="bottom-nav-item" onclick="openModal()">
+    <span class="nav-icon">➕</span> Adicionar
+  </button>
+  <button class="bottom-nav-item" onclick="setPage('ai')">
+    <span class="nav-icon">🤖</span> IA
+  </button>
+</nav>
+
+<!-- ─── Modal ─── -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modal-title">Nova Transação</h2>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+
+    <input type="hidden" id="edit-id">
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Tipo</label>
+        <select class="form-select" id="tx-type">
+          <option value="income">Entrada</option>
+          <option value="expense">Saída</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Valor (R$)</label>
+        <input type="number" class="form-input" id="tx-amount" placeholder="0,00" step="0.01" min="0">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Categoria</label>
+        <select class="form-select" id="tx-category">
+          <option value="Salário">Salário</option>
+          <option value="Freelance">Freelance</option>
+          <option value="Investimentos">Investimentos</option>
+          <option value="Alimentação">Alimentação</option>
+          <option value="Transporte">Transporte</option>
+          <option value="Moradia">Moradia</option>
+          <option value="Saúde">Saúde</option>
+          <option value="Educação">Educação</option>
+          <option value="Lazer">Lazer</option>
+          <option value="Outros">Outros</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Data</label>
+        <input type="date" class="form-input" id="tx-date">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Descrição</label>
+      <input type="text" class="form-input" id="tx-description" placeholder="Ex: Almoço no restaurante">
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+      <button class="btn-save" onclick="saveTransaction()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/dashboard.js"></script>
+<script src="js/transactions.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/ai.js"></script>
+</body>
+</html>
