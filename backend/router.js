@@ -75,6 +75,13 @@ async function router(req, res) {
       return await authenticate(req, res, () => aiChat(req, res))
     }
 
+    // Health check
+    if (method === "GET" && path === "/api/health") {
+      res.writeHead(200);
+      res.end(JSON.stringify({ status: "ok" }));
+      return
+    }
+
     // 404
     res.writeHead(404)
     res.end(JSON.stringify({ error: "Rota nao encontrada" }))

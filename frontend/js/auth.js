@@ -1,5 +1,5 @@
 // frontend/js/auth.js
-const API = 'http://localhost:3000/api'
+const API = CONFIG.API;
 
 function switchTab(tab) {
   const tabs = document.querySelectorAll('.auth-tab')

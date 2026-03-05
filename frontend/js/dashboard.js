@@ -1,4 +1,4 @@
-const API = 'http://localhost:3000/api';
+const API = CONFIG.API;
 const token = localStorage.getItem("token");
 const user = JSON.parse(localStorage.getItem("user") || "{}");
 
