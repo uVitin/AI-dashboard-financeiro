@@ -4,8 +4,7 @@
     "builder": "NIXPACKS"
   },
   "deploy": {
-    "startCommand": "node server.js",
-    "healthcheckPath": "/api/health",
+    "startCommand": "cd backend && node server.js",
     "restartPolicyType": "ON_FAILURE"
   }
 }
