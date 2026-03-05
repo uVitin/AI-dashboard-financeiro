@@ -1,5 +1,3 @@
-// frontend/js/transactions.js
-
 function renderTransactions() {
   const type = document.getElementById('filter-type').value
   const category = document.getElementById('filter-category').value
@@ -14,7 +12,6 @@ function renderTransactions() {
   const tbody = document.getElementById('transactions-tbody')
   tbody.innerHTML = data.length ? data.map(t => rowHTML(t, true)).join('') : emptyState()
 
-  // Popula filtro de categorias
   const categories = [...new Set(allTransactions.map(t => t.category))]
   const select = document.getElementById('filter-category')
   const current = select.value

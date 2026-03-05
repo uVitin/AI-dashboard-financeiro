@@ -1,4 +1,4 @@
-const API = "http://localhost:3000/api";
+const API = 'http://localhost:3000/api';
 const token = localStorage.getItem("token");
 const user = JSON.parse(localStorage.getItem("user") || "{}");
 
@@ -74,9 +74,9 @@ function renderOverview() {
     const expense = data.filter(t => t.type === "expense").reduce((s, t) => s + Number(t.amount), 0);
     const balance = income - expense;
 
-    document.getElementById("card-balance").textContent = formatCurrent(balance);
+    document.getElementById("card-balance").textContent = formatCurrency(balance);
     document.getElementById("card-balance").className = `card-value ${balance >= 0 ? "green" : "red"}`;
-    document.getElementById("card-income").textContent = formatCurrent(income);
+    document.getElementById("card-income").textContent = formatCurrency(income);
     document.getElementById("card-expense").textContent = formatCurrency(expense);
     document.getElementById("card-income-count").textContent = `${data.filter(t => t.type === "income").length} transações`;
     document.getElementById("card-expense-count").textContent = `${data.filter(t => t.type === "expense").length} transações`;
