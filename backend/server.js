@@ -12,24 +12,16 @@ const ALLOWED_ORIGINS = [
 ].filter(Boolean)
 
 const server = http.createServer((req, res) => {
-  const origin = req.headers.origin
+    res.setHeader("Access-Control-Allow-Origin", "*")
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization")
 
-  if (ALLOWED_ORIGINS.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin)
-  } else {
-    res.setHeader('Access-Control-Allow-Origin', '*')
-  }
-
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-
-  if (req.method === 'OPTIONS') {
-    res.writeHead(204)
-    res.end()
-    return
-  }
-
-  router(req, res)
+    if (req.method === 'OPTIONS') {
+        res.writeHead(204)
+        res.end()
+        return
+    }
+    router(req, res)
 })
 
 server.listen(PORT, () => {
